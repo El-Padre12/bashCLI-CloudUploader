@@ -41,6 +41,11 @@ Upload_File_To_Cloud() {
 }
 
 #main script/ iterates through all arguments from user and checks to see if file or directory exist
+if [[ $# -eq 0 ]]; then
+    echo "No file path provided."
+    exit 1
+fi
+
 for file_path in "$@"; do
     if [[ ! -e "$file_path" ]]; then
         echo " "$file_path" is not a file/directory."

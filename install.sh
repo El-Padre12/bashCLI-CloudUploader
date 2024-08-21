@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BIN_DIRECTORY="/usr/local/bin"
+BIN_DIRECTORY="/usr/bin"
 UPLOADER_SCRIPT="clouduploader.sh"
 
 if [ -f "$BIN_DIRECTORY/$UPLOADER_SCRIPT" ]; then
@@ -13,7 +13,7 @@ cp $UPLOADER_SCRIPT $BIN_DIRECTORY
 chmod +x $BIN_DIRECTORY/$UPLOADER_SCRIPT
 
 if [[ ":$PATH:" == *":$BIN_DIRECTORY:"* ]]; then
-	echo "Installation sucessful. You can now call '$UPLOADER_SCRIPT' from anywhere."
+	echo "Installation successful. You can now call '$UPLOADER_SCRIPT' from anywhere."
 else 
 	echo "Installation successful, but '$BIN_DIRECTORY' is not in PATH."
 fi
