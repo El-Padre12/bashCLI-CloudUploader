@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#Author: Angel C.
+#Date: 08/20/2024
+#Language: Bash
+#Description: CLI tool used to upload local files/directories to your AWS s3 bucket.
+
 #generate a pre-signed URL for sharing access to an S3 object.
 create_shareable_link() {
     echo $(aws s3 presign s3://"$BUCKET_NAME"/$(basename "$1") --expires-in 10800)
