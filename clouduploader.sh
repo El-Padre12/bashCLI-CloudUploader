@@ -10,10 +10,43 @@ create_shareable_link() {
     echo $(aws s3 presign s3://"$BUCKET_NAME"/$(basename "$1") --expires-in 10800)
 }
 
+#menu function for listing available s3 buckets
+Available_S3_Buckets_Menu() {
+
+    local file_path="$1"
+
+    echo "Debug: Received file path: '$file_path'"
+
+    ## Prompts bucket selection
+    echo -e "Available S3 Buckets:\n"
+    aws s3 ls
+    read -r -p "Select a bucket: " BUCKET_NAME
+
+    ## Bucket and file verifications
+    if aws s3api head-bucket --bucket "$BUCKET_NAME" 1>/dev/null 2>/dev/null; then
+        echo -e "\n✓ :Bucket permissions"
+    else
+        echo "❌ Error – bucket doesn't exist."
+        exit 2
+    fi
+
+    echo "Debug: Verifying file path: $file_path"
+    ls -l "$file_path"
+
+    if [ -f "$file_path" ]; then
+        echo -e "✓ File (upload) permissions"
+    else
+        echo "❌ Error - file doesn't exist"
+        exit 2
+    fi
+}
+
 #function for uploading file or directory to cloud
 Upload_File_To_Cloud() {
 
     local file_name="$1"
+
+    echo "Debug: Uploading file/directory '$file_name' to bucket '$BUCKET_NAME'"
 
     #checks to see if path to file is a directory or file
     if [[ -d "$file_name" ]]; then
@@ -50,6 +83,7 @@ for file_path in "$@"; do
     if [[ ! -e "$file_path" ]]; then
         echo " "$file_path" is not a file/directory."
     else
+        Available_S3_Buckets_Menu "$file_path"
         Upload_File_To_Cloud "$file_path"
     fi
 done
